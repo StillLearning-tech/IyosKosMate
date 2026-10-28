@@ -142,7 +142,7 @@ $total_selesai = $result_maintenance_selesai->fetch_assoc()["total"];
 
         <div>
 
-            <h1>Dashboard KosMate - CI/CD aktif</h1>
+            <h1>Test CI/CD</h1>
 
             <p class="subtitle">
                 Sistem Manajemen Kos
