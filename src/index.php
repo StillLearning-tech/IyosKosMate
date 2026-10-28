@@ -124,7 +124,7 @@ $total_selesai = $result_maintenance_selesai->fetch_assoc()["total"];
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
-    <title>Dashboard KosMate - CI/CD aktif</title>
+    <title><h1>Dashboard KosMate - CI/CD Aktif</h1></title>
 
     <link rel="stylesheet" href="css/style.css">
 
