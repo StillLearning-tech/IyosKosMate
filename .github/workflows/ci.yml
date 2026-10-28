@@ -1,0 +1,27 @@
+
+name: KosMate CI
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Check Dockerfile
+        run: test -f Dockerfile
+
+      - name: Check Docker Compose file
+        run: test -f docker-compose.yml
+
+      - name: Build Docker image
+        run: docker build -t kosmate-web:ci .
