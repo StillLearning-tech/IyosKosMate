@@ -77,7 +77,7 @@ export default function DashboardPage({ setActiveTab }) {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-gradient-to-r from-indigo-900 via-indigo-800 to-indigo-950 p-6 md:p-8 rounded-2xl text-white shadow-md">
         <div>
           <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-indigo-500/30 text-indigo-200 text-xs font-semibold mb-3 border border-indigo-400/30">
-            <ShieldCheck className="w-3.5 h-3.5" /> 3-Container Microservice Architecture
+            <ShieldCheck className="w-3.5 h-3.5" /> 
           </div>
           <h1 className="text-2xl md:text-3xl font-bold tracking-tight">
             Selamat Datang di KosMate
