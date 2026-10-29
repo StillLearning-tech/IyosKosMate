@@ -3,7 +3,10 @@ services:
   # CONTAINER 1: DATABASE (PostgreSQL 16)
   # ==========================================================
   db:
-    image: postgres:16-alpine
+    build:
+      context: ./database
+      dockerfile: Dockerfile
+    image: meckagan/database:latest
     container_name: kosmate-db
     restart: unless-stopped
     environment:
@@ -30,6 +33,7 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
+    image: meckagan/backend:latest
     container_name: kosmate-backend
     restart: unless-stopped
     environment:
@@ -61,6 +65,7 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+    image: meckagan/frontend:latest
     container_name: kosmate-frontend
     restart: unless-stopped
     ports:

@@ -1,29 +1,109 @@
-name: KosMate Microservices CI
+name: KosMate CI/CD Pipeline
 
 on:
   push:
     branches:
+      - main
       - master
+    tags:
+      - 'v*'
   pull_request:
     branches:
+      - main
       - master
 
 permissions:
   contents: read
 
 jobs:
-  validate-and-build:
+  # ==========================================================
+  # STAGE 1: AUTOMATED TESTING & VALIDATION
+  # ==========================================================
+  test:
+    name: Run Automated Tests
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout source code
+      - name: Checkout Source Code
         uses: actions/checkout@v4
 
-      - name: Validate Docker Compose Config
+      - name: Setup Node.js Environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache-dependency-path: |
+            backend/package-lock.json
+            frontend/package-lock.json
+
+      - name: Validate Docker Compose Configuration
         run: docker compose config
 
-      - name: Build Backend Docker Image
-        run: docker build -t kosmate-backend:ci ./backend
+      - name: Test Backend Microservice
+        run: |
+          cd backend
+          npm ci
+          npm test
 
-      - name: Build Frontend Docker Image
-        run: docker build -t kosmate-frontend:ci ./frontend
+      - name: Test & Build Frontend Microservice
+        run: |
+          cd frontend
+          npm ci
+          npm run build
+
+  # ==========================================================
+  # STAGE 2: BUILD & PUSH TO DOCKER HUB
+  # ==========================================================
+  deploy-to-dockerhub:
+    name: Build & Push Images to Docker Hub
+    needs: test
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # 1. Build and Push Backend Image
+      - name: Build & Push Backend Image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./backend
+          file: ./backend/Dockerfile
+          push: true
+          tags: |
+            meckagan/backend:latest
+            meckagan/backend:${{ github.sha }}
+            meckagan/backend:${{ github.ref_name }}
+
+      # 2. Build and Push Frontend Image
+      - name: Build & Push Frontend Image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./frontend
+          file: ./frontend/Dockerfile
+          push: true
+          tags: |
+            meckagan/frontend:latest
+            meckagan/frontend:${{ github.sha }}
+            meckagan/frontend:${{ github.ref_name }}
+
+      # 3. Build and Push Database Image
+      - name: Build & Push Database Image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./database
+          file: ./database/Dockerfile
+          push: true
+          tags: |
+            meckagan/database:latest
+            meckagan/database:${{ github.sha }}
+            meckagan/database:${{ github.ref_name }}
