@@ -16,7 +16,6 @@ import {
   Header,
   Footer,
   PageNumber,
-  NumberFormat
 } from 'docx';
 
 function createHeading1(text) {
@@ -48,7 +47,7 @@ function p(text, options = {}) {
     children: [
       new TextRun({
         text,
-        size: options.size || 22, // 11pt
+        size: options.size || 22,
         font: 'Calibri',
         bold: options.bold || false,
         italics: options.italics || false,
@@ -80,7 +79,7 @@ function createCodeBlock(codeLines) {
         children: [
           new TextRun({
             text: line,
-            size: 19, // ~9.5pt
+            size: 19,
             font: 'Consolas',
             color: '1E293B',
           }),
@@ -119,7 +118,7 @@ function createTable(headers, rows) {
                   spacing: { before: 80, after: 80 },
                 }),
               ],
-              shading: { fill: '3B82F6' }, // Blue header
+              shading: { fill: '3B82F6' },
             })
         ),
       }),
@@ -145,17 +144,16 @@ function createTable(headers, rows) {
   });
 }
 
-// Generate Document
 async function generateDocx() {
   const doc = new Document({
     creator: 'Tim Pengembang KosMate',
     title: 'Laporan Proyek Modernisasi KosMate Microservices & CI/CD',
-    description: 'Dokumentasi teknis kontainerisasi 3-container dan otomatisasi CI/CD dengan Docker Hub',
+    description: 'Dokumentasi teknis kontainerisasi 3-container dan otomatisasi CI/CD dengan Docker Hub beserta Script Presentasi Video',
     styles: {
       default: {
         document: {
           run: { font: 'Calibri', size: 22, color: '333333' },
-          paragraph: { spacing: { line: 276, before: 60, after: 100 } }, // 1.15 line spacing
+          paragraph: { spacing: { line: 276, before: 60, after: 100 } },
         },
       },
     },
@@ -169,7 +167,7 @@ async function generateDocx() {
                 alignment: AlignmentType.RIGHT,
                 children: [
                   new TextRun({
-                    text: 'KosMate Architecture & CI/CD Report',
+                    text: 'KosMate Architecture, CI/CD Report & Video Script',
                     size: 16,
                     color: '94A3B8',
                     italics: true,
@@ -195,9 +193,9 @@ async function generateDocx() {
           }),
         },
         children: [
-          // TITLE / COVER SECTION
+          // COVER SECTION
           new Paragraph({
-            text: 'LAPORAN TUGAS BESAR REKAYASA PERANGKAT LUNAK',
+            text: 'LAPORAN IMPLEMENTASI ARSITEKTUR CLOUD & DEVOPS',
             alignment: AlignmentType.CENTER,
             children: [
               new TextRun({
@@ -211,7 +209,7 @@ async function generateDocx() {
             spacing: { before: 300, after: 120 },
           }),
           new Paragraph({
-            text: 'MODERNISASI APLIKASI KOSMATE MENJADI 3-CONTAINER MICROSERVICES DENGAN AUTOMATED TESTING & CI/CD PIPELINE',
+            text: 'MODERNISASI APLIKASI KOSMATE MENJADI 3-CONTAINER MICROSERVICES DENGAN AUTOMATED TESTING & CI/CD PIPELINE DOCKER HUB',
             alignment: AlignmentType.CENTER,
             children: [
               new TextRun({
@@ -234,11 +232,11 @@ async function generateDocx() {
 
           // PROFIL TIM
           createTable(
-            ['Peran Anggota', 'Nama Mahasiswa', 'Fokus Tanggung Jawab'],
+            ['Peran Anggota', 'Nama Mahasiswa', 'Fokus Tanggung Jawab & Demo'],
             [
-              ['Pembicara 1 / Anggota 1', 'Pembicara 1', 'System Architect, Problem Analysis, & Database Container'],
-              ['Pembicara 2 / Anggota 2', 'Pembicara 2', 'Backend REST API, Frontend SPA, & Reverse Proxy Networking'],
-              ['Pembicara 3 / Anggota 3', 'Pembicara 3', 'DevOps Engineer, GitHub Actions CI/CD Pipeline, & Docker Hub Deployment'],
+              ['Pembicara 1', 'Pembicara 1', 'System Architect: Problem Analysis, Database Container, & Demo Docker Run'],
+              ['Pembicara 2', 'Pembicara 2', 'Fullstack & Network: Backend API, Frontend React SPA, & Demo Web Dashboard'],
+              ['Pembicara 3', 'Pembicara 3', 'DevOps Engineer: GitHub Actions CI/CD, Automated Testing, & Demo Docker Hub'],
             ]
           ),
 
@@ -250,7 +248,7 @@ async function generateDocx() {
           p('Dalam era komputasi awan (cloud computing) dan DevOps modern, arsitektur monolitik tradisional kian menghadapi kendala skalabilitas, isolasi sumber daya, dan reliabilitas proses rilis perangkat lunak. Aplikasi KosMate pada versi awalnya dibangun menggunakan tumpukan teknologi monolitik PHP 8.2 procedural yang menggabungkan logika bisnis, query database (raw mysqli), dan antarmuka pengguna berbasis server-side rendering (HTML & CSS statis) ke dalam satu wadah runtime yang sama.'),
           p('Pola monolitik tersebut menimbulkan sejumlah kelemahan kritis:'),
           bullet(' Tuntutan penskalaan infrastruktur memaksa keseluruhan aplikasi digandakan, termasuk modul-modul yang tidak memerlukan beban komputasi tinggi.', 'Tight Coupling & Inflexible Scaling:'),
-          bullet(' Kerusakan atau kegagalan fatal pada satu fungsi PHP (misalnya memory leak saat query) berdampak langsung pada kegagalan seluruh sistem web.', 'Single Point of Failure:'),
+          bullet(' Kerusakan atau kegagalan fatal pada satu fungsi PHP berdampak langsung pada kegagalan seluruh sistem web.', 'Single Point of Failure:'),
           bullet(' Pengujian regresi dilakukan secara manual, serta proses build dan push ke container registry tidak terstandarisasi, meningkatkan risiko human-error di server produksi.', 'Ketiadaan Pipeline CI/CD:'),
           p('Untuk menjawab tantangan tersebut, dilakukan re-engineering komprehensif terhadap proyek KosMate dengan mengadopsi prinsip 3-Container Microservices Architecture dan otomatisasi Continuous Integration / Continuous Deployment (CI/CD) ke registry Docker Hub publik (meckagan/backend, meckagan/frontend, meckagan/database).'),
 
@@ -268,7 +266,6 @@ async function generateDocx() {
           // BAB II
           createHeading1('BAB II. ARSITEKTUR SISTEM & DESAIN 3-CONTAINER'),
           createHeading2('2.1 Komparasi Arsitektur Monolith vs Microservices'),
-          p('Tabel berikut menyajikan transformasi paradigma dari sistem KosMate lama ke arsitektur kontainer modern:'),
           createTable(
             ['Dimensi Evaluasi', 'Arsitektur Monolitik PHP (Lama)', 'Arsitektur 3-Container Microservices (Baru)'],
             [
@@ -326,7 +323,6 @@ async function generateDocx() {
           p('Continuous Integration (CI) dan Continuous Deployment (CD) memastikan setiap pembaruan kode pada branch main/master diverifikasi secara otomatis sebelum dipaketkan dan dipublikasikan ke container registry publik Docker Hub. Hal ini menghilangkan risiko deployment aplikasi rusak ke lingkungan produksi.'),
 
           createHeading2('3.2 Arsitektur Workflow GitHub Actions (.github/workflows/ci.yml)'),
-          p('Pipeline GitHub Actions dipecah menjadi 2 tahapan (Job) yang saling terhubung:'),
           createTable(
             ['Tahapan (Job)', 'Trigger Event', 'Tindakan yang Dijalankan', 'Output Hasil'],
             [
@@ -340,7 +336,7 @@ async function generateDocx() {
                 'Stage 2: deploy-to-dockerhub',
                 'Push ke main/master (Hanya jika Stage 1 Sukses)',
                 '1. Otentikasi Docker Hub via Secrets\n2. Build & Push meckagan/backend\n3. Build & Push meckagan/frontend\n4. Build & Push meckagan/database',
-                'Image publik terbaru tersedia di Docker Hub dengan multi-tagting (:latest, :SHA, :branch)',
+                'Image publik terbaru tersedia di Docker Hub dengan multi-tagging (:latest, :SHA, :branch)',
               ],
             ]
           ),
@@ -351,15 +347,14 @@ async function generateDocx() {
           bullet('Pengujian Frontend: Memeriksa integritas bundel TypeScript/JSX, import icon, dan CSS compiler tanpa adanya variabel tak terdefinisi.', 'Vite Build Verification: '),
 
           createHeading2('3.4 Strategi Multi-Tagging Image Docker Hub'),
-          p('Setiap image yang di-push ke registry meckagan diberi 3 jenis tag untuk memudahkan pelacakan versi:'),
+          p('Setiap image yang di-push ke registry meckagan diberi 3 jenis tag:'),
           bullet('Tag default yang menunjuk rilis paling mutakhir untuk kemudahan deployment cepat.', ':latest -> '),
-          bullet('Identitas commit SHA dari git (contoh: :52489f3) untuk audit keamanan dan kemampuan rollback instan bila terjadi regresi.', ':<commit-sha> -> '),
-          bullet('Penanda branch asal (contoh: :main atau :master) untuk memisahkan stage pengujian.', ':<branch-name> -> '),
+          bullet('Identitas commit SHA dari git untuk audit keamanan dan kemampuan rollback instan.', ':<commit-sha> -> '),
+          bullet('Penanda branch asal untuk memisahkan stage pengujian.', ':<branch-name> -> '),
 
           // BAB IV
           createHeading1('BAB IV. HASIL DAN EVALUASI PENGUJIAN'),
           createHeading2('4.1 Verifikasi Eksekusi Kontainer'),
-          p('Pengujian deployment diuji menggunakan skrip otomatis deploy-local.ps1 dan docker compose up -d. Hasil eksekusi menunjukkan ketiga container berhasil terangkat dalam waktu rata-rata 6 detik:'),
           createTable(
             ['Nama Container', 'Image Source', 'Port Host Binding', 'Status Healthcheck'],
             [
@@ -384,13 +379,34 @@ async function generateDocx() {
           createHeading2('5.2 Saran Pengembangan'),
           bullet('Mengimplementasikan monitoring metrik performa container menggunakan Prometheus dan Grafana.'),
           bullet('Menerapkan orkestrasi skala besar menggunakan Kubernetes (K8s) dengan StatefulSet untuk Database dan Deployment dengan Horizontal Pod Autoscaler (HPA) untuk Backend dan Frontend.'),
+
+          // LAMPIRAN SCRIPT PRESENTASI VIDEO ONLINE
+          createHeading1('LAMPIRAN: SCRIPT PRESENTASI VIDEO ONLINE & LIVE DEMO (3 ORANG)'),
+          p('Panduan ini dirancang untuk rekaman video presentasi online (Zoom/Google Meet/OBS) berdurasi 12-15 menit dengan pembagian tugas dan demonstrasi langsung di layar.', { italics: true }),
+
+          createHeading2('Panduan Teknis Rekaman'),
+          bullet('Persiapan Browser Tab: Slide, localhost:8080 (Web), localhost:5000/api/dashboard/stats, localhost:5000/health, GitHub Actions tab, dan Docker Hub meckagan.'),
+          bullet('Semua anggota mengaktifkan kamera (on-cam). Screen share dapat bergantian atau dikendalikan operator.'),
+
+          createHeading2('Segmen 1: Pembicara 1 (Pendahuluan & Live Demo Docker Run)'),
+          p('Dialog Pembicara 1: "Halo semuanya! Selamat datang di video presentasi proyek kelompok kami. Hari ini kami mendemonstrasikan transformasi aplikasi KosMate menjadi 3-Container Microservices dengan Automated Testing dan CI/CD ke Docker Hub..."', { italics: true }),
+          p('Tindakan Live Demo 1: Berpindah ke terminal VS Code, jalankan "./deploy-local.ps1", tunjukkan status container kosmate-db (healthy), kosmate-backend, dan kosmate-frontend yang berhasil aktif.'),
+
+          createHeading2('Segmen 2: Pembicara 2 (Backend, Frontend, & Live Demo Web Dashboard)'),
+          p('Dialog Pembicara 2: "Terima kasih Pembicara 1! Saya akan menjelaskan container Backend Node.js Express dan Frontend React Nginx... Nginx bertindak sebagai Reverse Proxy internal sehingga akses cukup via port 8080 tanpa kendala CORS..."', { italics: true }),
+          p('Tindakan Live Demo 2: Buka browser http://localhost:8080, demonstrasikan metrik real-time dashboard, menu kamar, penghuni, dan pembayaran. Kemudian buka http://localhost:5000/api/dashboard/stats untuk memperlihatkan respons payload JSON independen.'),
+
+          createHeading2('Segmen 3: Pembicara 3 (CI/CD GitHub Actions & Live Demo Docker Hub)'),
+          p('Dialog Pembicara 3: "Terima kasih Pembicara 2! Memiliki container hebat harus didukung pengiriman kode otomatis. Di file .github/workflows/ci.yml, kami membangun pipeline dua tahap: Stage 1 Automated Testing dan Stage 2 Deploy to Docker Hub..."', { italics: true }),
+          p('Tindakan Live Demo 3: Buka tab GitHub Actions, tunjukkan pipeline yang centang hijau berhasil melewati pengujian compose, backend unit test, dan frontend build. Lalu buka Docker Hub meckagan untuk memperlihatkan repositori publik meckagan/backend, meckagan/frontend, dan meckagan/database dengan multi-tagging.'),
+          p('Penutup Pembicara 3: Rangkum kesimpulan keberhasilan proyek dan sampaikan salam penutup bersama seluruh tim.'),
         ],
       },
     ],
   });
 
   const buffer = await Packer.toBuffer(doc);
-  const outPath = path.resolve('D:/jos/KosMate', 'Laporan_Proyek_KosMate_Microservices_CICD.docx');
+  const outPath = path.resolve('D:/jos/KosMate', 'Laporan_Proyek_KosMate_Microservices_CICD_Lengkap.docx');
   fs.writeFileSync(outPath, buffer);
   console.log(`Document successfully generated at: ${outPath}`);
 }
