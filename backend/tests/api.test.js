@@ -21,3 +21,4 @@ test('Format Rupiah helper test', () => {
   assert.strictEqual(formatRupiah(1500000).replace(/\s/g, ' '), 'Rp 1.500.000'.replace(/\s/g, ' '));
   assert.strictEqual(formatRupiah(null), 'Rp 0');
 });
+
