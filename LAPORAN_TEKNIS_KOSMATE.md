@@ -495,3 +495,4 @@ Transformasi arsitektur KosMate dari monolitik PHP lama ke **3-Container Microse
 1. **Modularitas Penuh**: Setiap container (Frontend, Backend, Database) memiliki runtime dan dependensi independen, memudahkan maintenance dan scaling terarah.
 2. **Arsitektur Jaringan Bersih**: Pemanfaatan Nginx Reverse Proxy internal pada container frontend berhasil menyatukan akses sistem ke port 8080 dan meniadakan kendala Cross-Origin Resource Sharing (CORS).
 3. **Standarisasi Rilis DevOps**: Implementasi CI/CD berbasis GitHub Actions memberikan jaminan kualitas kode melalui automated testing bertingkat dan mengotomatiskan penerbitan image ke Docker Hub secara konsisten dan aman.
+

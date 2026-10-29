@@ -580,3 +580,4 @@ generateDocx().catch((err) => {
   console.error('Error generating technical report:', err);
   process.exit(1);
 });
+
