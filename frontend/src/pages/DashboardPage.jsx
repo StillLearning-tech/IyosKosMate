@@ -80,7 +80,7 @@ export default function DashboardPage({ setActiveTab }) {
             <ShieldCheck className="w-3.5 h-3.5" /> 
           </div>
           <h1 className="text-2xl md:text-3xl font-bold tracking-tight">
-            Selamat Datang di KosMate
+            Test CI/CD
           </h1>
           <p className="text-indigo-200 mt-1 text-sm md:text-base max-w-2xl">
             Sistem manajemen kos terpadu: monitor ketersediaan kamar, penghuni aktif, arus kas pembayaran, dan tiket perbaikan fasilitas secara real-time.
