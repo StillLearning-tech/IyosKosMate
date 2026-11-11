@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { api } from '../api/client';
 import { formatRupiah, formatDate } from '../utils/format';
-import { Plus, Search, Edit2, Trash2, CheckCircle, Clock, AlertCircle, X, CreditCard } from 'lucide-react';
+import { buildPaymentsCsv } from '../utils/paymentCsv';
+import { Plus, Search, Edit2, Trash2, CheckCircle, Clock, AlertCircle, X, CreditCard, Download } from 'lucide-react';
 
 export default function PembayaranPage() {
   const [payments, setPayments] = useState([]);
@@ -49,6 +50,28 @@ export default function PembayaranPage() {
     } catch (err) {
       console.error(err);
     }
+  };
+
+  // Export data pembayaran yang sedang ditampilkan (mengikuti pencarian dan filter).
+  const handleExportCsv = () => {
+    if (payments.length === 0) {
+      alert('Tidak ada data pembayaran untuk diekspor.');
+      return;
+    }
+
+    const csvContent = buildPaymentsCsv(payments);
+    const blob = new Blob([csvContent], {
+      type: 'text/csv;charset=utf-8;',
+    });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+
+    link.href = url;
+    link.download = `laporan-pembayaran-${new Date().toISOString().slice(0, 10)}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
 
   useEffect(() => {
@@ -138,12 +161,21 @@ export default function PembayaranPage() {
           <h1 className="text-2xl font-bold tracking-tight text-slate-900">Data Pembayaran</h1>
           <p className="text-sm text-slate-500">Pantau tagihan bulanan kos, histori penerimaan uang sewa, dan status pelunasan.</p>
         </div>
-        <button
-          onClick={handleOpenAdd}
-          className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-semibold shadow-xs transition"
-        >
-          <Plus className="w-4 h-4" /> Catat Tagihan / Pembayaran
-        </button>
+        <div className="flex flex-wrap gap-2">
+          <button
+            onClick={handleExportCsv}
+            disabled={loading || payments.length === 0}
+            className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-semibold shadow-xs transition disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <Download className="w-4 h-4" /> Export CSV
+          </button>
+          <button
+            onClick={handleOpenAdd}
+            className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-semibold shadow-xs transition"
+          >
+            <Plus className="w-4 h-4" /> Catat Tagihan / Pembayaran
+          </button>
+        </div>
       </div>
 
       {/* Filter and Search Bar */}
